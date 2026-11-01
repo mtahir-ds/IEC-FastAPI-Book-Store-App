@@ -5,26 +5,39 @@ declarative base class, and utility functions for session lifecycle management
 and table creation in PostgreSQL using SQLAlchemy.
 """
 
-from sqlalchemy import create_engine  # Creates the database engine to establish and manage connections to the database
-from sqlalchemy.orm import sessionmaker, declarative_base  # sessionmaker manages DB sessions/transactions; declarative_base provides a base class for ORM models
+from sqlalchemy import (
+    create_engine,
+)  # Creates the database engine to establish and manage connections to the database
+from sqlalchemy.orm import (
+    sessionmaker,
+    declarative_base,
+)  # sessionmaker manages DB sessions/transactions; declarative_base provides a base class for ORM models
 
-from dotenv import load_dotenv  # Loads environment variables from a .env file to keep secrets out of source code
+from dotenv import (
+    load_dotenv,
+)  # Loads environment variables from a .env file to keep secrets out of source code
 
 import os  # Provides access to environment variables to securely read configuration
 
 load_dotenv()  # Reads the .env file and loads variables into the environment so they are accessible to the app
 
-SQLALCHEMY_DATABASE_URL = os.getenv(key="SQLALCHEMY_DATABASE_URL")  # Retrieves the DB connection URL from the environment to avoid hardcoding credentials
+SQLALCHEMY_DATABASE_URL = os.getenv(
+    key="SQLALCHEMY_DATABASE_URL"
+)  # Retrieves the DB connection URL from the environment to avoid hardcoding credentials
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)  # Initializes the connection pool and dialect to communicate with the database
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL
+)  # Initializes the connection pool and dialect to communicate with the database
 
 SessionLocal = sessionmaker(
     autocommit=False,  # Prevents automatic commits so transactions remain explicit and atomic
-    autoflush=False,   # Prevents premature flushing of queries before committing or explicitly flushing
-    bind=engine        # Associates the session factory with our configured database engine
+    autoflush=False,  # Prevents premature flushing of queries before committing or explicitly flushing
+    bind=engine,  # Associates the session factory with our configured database engine
 )
 
-Base = declarative_base()  # Base class for all ORM models to inherit from and register their schema metadata
+Base = (
+    declarative_base()
+)  # Base class for all ORM models to inherit from and register their schema metadata
 
 
 def get_db():
@@ -60,4 +73,6 @@ def create_table():
     Outputs:
         None
     """
-    Base.metadata.create_all(bind=engine)  # Generates and executes CREATE TABLE SQL statements for all registered models
+    Base.metadata.create_all(
+        bind=engine
+    )  # Generates and executes CREATE TABLE SQL statements for all registered models
