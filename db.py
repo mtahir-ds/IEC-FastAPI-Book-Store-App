@@ -43,6 +43,8 @@ def get_db():
 
     try:
         yield db  # Provides the session to the calling endpoint/context
+    except Exception as e:
+        print(f"Exception: {e}")
     finally:
         db.close()  # Ensures the session is closed when the request lifecycle ends
 
